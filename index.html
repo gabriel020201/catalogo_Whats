@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Online - Catálogo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="logo">
+                    <i class="fas fa-store"></i>
+                    Minha Loja
+                </h1>
+                <div class="nav-menu">
+                    <button class="cart-btn" onclick="toggleCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        Carrinho
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Seção do Catálogo -->
+        <section class="catalog-banner">
+            <div class="container">
+                <div class="catalog-content">
+                    <div class="catalog-info">
+                        <h2>
+                            <i class="fas fa-book-open"></i>
+                            Catálogo Atualizado
+                        </h2>
+                        <p>Confira nosso catálogo completo com todos os produtos disponíveis, preços e especificações detalhadas.</p>
+                        <div class="catalog-date">
+                            <i class="fas fa-calendar-alt"></i>
+                            Atualizado em: 28/07/2025
+                        </div>
+                        <div class="catalog-actions">
+                            <button class="btn-catalog-view" onclick="viewCatalog()">
+                                <i class="fas fa-eye"></i>
+                                Visualizar Catálogo
+                            </button>
+                            <a href="CATALOGO ATUALIZADO 28072025.pdf" download class="btn-catalog-download">
+                                <i class="fas fa-download"></i>
+                                Baixar PDF
+                            </a>
+                        </div>
+                    </div>
+                    <div class="catalog-preview">
+                        <i class="fas fa-file-pdf catalog-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filtros -->
+        <section class="filters">
+            <div class="container">
+                <h2>Nossos Produtos</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
+                    <button class="filter-btn" onclick="filterProducts('eletronicos')">Eletrônicos</button>
+                    <button class="filter-btn" onclick="filterProducts('roupas')">Roupas</button>
+                    <button class="filter-btn" onclick="filterProducts('casa')">Casa</button>
+                    <button class="filter-btn" onclick="filterProducts('esportes')">Esportes</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catálogo de Produtos -->
+        <section class="catalog">
+            <div class="container">
+                <div class="products-grid" id="productsGrid">
+                    <!-- Produtos serão carregados via JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal do Carrinho -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>
+                    <i class="fas fa-shopping-cart"></i>
+                    Seu Carrinho
+                </h2>
+                <button class="close-cart" onclick="toggleCart()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="cart-items" id="cartItems">
+                <!-- Itens do carrinho serão carregados via JavaScript -->
+            </div>
+            
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: R$ <span id="cartTotal">0,00</span></strong>
+                </div>
+                <div class="cart-actions">
+                    <button class="btn-clear" onclick="clearCart()">
+                        <i class="fas fa-trash"></i>
+                        Limpar Carrinho
+                    </button>
+                    <button class="btn-checkout" onclick="checkout()">
+                        <i class="fab fa-whatsapp"></i>
+                        Finalizar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+
+    <!-- Modal de Confirmação -->
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-content">
+            <div class="confirm-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 class="confirm-title">Confirmar Ação</h3>
+            <p class="confirm-message" id="confirmMessage">Tem certeza que deseja continuar?</p>
+            <div class="confirm-actions">
+                <button class="btn-cancel" onclick="closeConfirmModal()">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn-confirm" id="confirmBtn" onclick="confirmAction()">
+                    <i class="fas fa-check"></i>
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay para Modal de Confirmação -->
+    <div class="confirm-overlay" id="confirmOverlay" onclick="closeConfirmModal()"></div>
+
+    <!-- Modal do Catálogo PDF -->
+    <div class="catalog-modal" id="catalogModal">
+        <div class="catalog-modal-content">
+            <div class="catalog-modal-header">
+                <h2>
+                    <i class="fas fa-book-open"></i>
+                    Catálogo Completo
+                </h2>
+                <button class="close-catalog" onclick="closeCatalogModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="catalog-modal-body">
+                <div class="pdf-controls">
+                    <button class="btn-pdf-download" onclick="downloadCatalog()">
+                        <i class="fas fa-download"></i>
+                        Baixar PDF
+                    </button>
+                    <button class="btn-pdf-fullscreen" onclick="toggleFullscreen()">
+                        <i class="fas fa-expand"></i>
+                        Tela Cheia
+                    </button>
+                </div>
+                <div class="pdf-viewer">
+                    <iframe id="pdfViewer" src="" width="100%" height="600px" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay para Modal do Catálogo -->
+    <div class="catalog-overlay" id="catalogOverlay" onclick="closeCatalogModal()"></div>
+
+    <!-- Botão Voltar ao Topo -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Voltar ao topo">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="products.js"></script>
+    <script src="cart.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

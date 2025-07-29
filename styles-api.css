@@ -1,0 +1,347 @@
+/* Estilos adicionais para integração com banco de dados */
+
+/* Loading global */
+#globalLoader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loader-content {
+    text-align: center;
+    color: #667eea;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Indicador de estoque */
+.product-stock {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.product-stock .low-stock {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.product-stock i {
+    font-size: 0.8rem;
+}
+
+/* Estado sem produtos */
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+}
+
+.no-products i {
+    font-size: 4rem;
+    color: #dee2e6;
+    margin-bottom: 1rem;
+}
+
+.no-products h3 {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+/* Botão desabilitado */
+.add-to-cart-btn:disabled {
+    background: #6c757d !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.add-to-cart-btn:disabled:hover {
+    transform: none !important;
+}
+
+/* Modal de dados do cliente */
+.customer-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    z-index: 2001;
+    width: 90%;
+    max-width: 450px;
+    overflow: hidden;
+    display: none;
+}
+
+.customer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.customer-content {
+    padding: 2rem;
+}
+
+.customer-content h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 2rem;
+}
+
+.form-actions button {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-actions button[type="button"] {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+
+.form-actions button[type="button"]:hover {
+    background: #e9ecef;
+    border-color: #ced4da;
+}
+
+.form-actions button[type="submit"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6a4c93 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Notificações de alerta */
+.notification.warning {
+    background: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.notification.warning i {
+    color: #212529 !important;
+}
+
+/* Responsividade para modal do cliente */
+@media (max-width: 480px) {
+    .customer-modal {
+        width: 95%;
+        margin: 0 10px;
+    }
+    
+    .customer-content {
+        padding: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+/* Status de conectividade */
+.connection-status {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 1001;
+    transition: all 0.3s ease;
+}
+
+.connection-status.online {
+    background: #28a745;
+    color: white;
+}
+
+.connection-status.offline {
+    background: #dc3545;
+    color: white;
+}
+
+.connection-status.connecting {
+    background: #ffc107;
+    color: #212529;
+}
+
+/* Animação para produtos carregando */
+.product-card.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.product-card.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+
+/* Badge de estoque baixo */
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.product-card.low-stock::before {
+    background: #dc3545;
+    animation: pulse-red 2s infinite;
+}
+
+.product-card.out-of-stock::before {
+    background: #6c757d;
+}
+
+@keyframes pulse-red {
+    0%, 100% { 
+        opacity: 0.8;
+        transform: scale(1); 
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1.2); 
+    }
+}
+
+/* Melhorias no carrinho para mostrar limitações de estoque */
+.cart-item-stock-info {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.cart-item-stock-info.warning {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Estilos para dashboard admin (futuro) */
+.admin-panel {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 15px;
+    margin: 2rem 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #667eea;
+}
+
+.stat-card p {
+    color: #666;
+    font-weight: bold;
+}
