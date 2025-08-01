@@ -69,7 +69,7 @@ function loadProducts(category = 'all') {
     // Gerar HTML dos produtos
     const productsHTML = filteredProducts.map(product => {
         const productName = String(product.name || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-        const productDescription = String(product.description || productName).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+        const productReferencia = String(product.referencia || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCategory = String(product.category || 'outros');
         const productPrice = Number(product.price) || 0;
         const productId = Number(product.id) || 0;
@@ -88,7 +88,7 @@ function loadProducts(category = 'all') {
                 <div class="product-info">
                     <div class="product-category">${categoryName}</div>
                     <h3 class="product-name">${productName}</h3>
-                    <p class="product-description">${productDescription}</p>
+                    <p class="product-description">Ref: ${productReferencia}</p>
                     <div class="product-price">${formattedPrice}</div>
                     <button class="add-to-cart-btn" onclick="addProductToCart(${productId})">
                         <i class="fas fa-cart-plus"></i>
@@ -185,7 +185,7 @@ function searchProducts() {
     // Usar a mesma lógica de renderização
     const productsHTML = filteredProducts.map(product => {
         const productName = String(product.name || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-        const productDescription = String(product.description || productName).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+        const productReferencia = String(product.referencia || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCategory = String(product.category || 'outros');
         const productPrice = Number(product.price) || 0;
         const productId = Number(product.id) || 0;
@@ -199,7 +199,7 @@ function searchProducts() {
                 <div class="product-info">
                     <div class="product-category">${getCategoryDisplayName(productCategory)}</div>
                     <h3 class="product-name">${productName}</h3>
-                    <p class="product-description">${productDescription}</p>
+                    <p class="product-description">Ref: ${productReferencia}</p>
                     <div class="product-price">${formatProductPrice(productPrice)}</div>
                     <button class="add-to-cart-btn" onclick="addProductToCart(${productId})">
                         <i class="fas fa-cart-plus"></i>
