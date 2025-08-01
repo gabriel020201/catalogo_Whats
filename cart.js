@@ -22,6 +22,29 @@ class ShoppingCart {
     constructor() {
         this.items = this.loadFromStorage();
         this.updateCartDisplay();
+        console.log('🛒 Carrinho inicializado com', this.items.length, 'itens');
+    }
+
+    // Método para atualizar dados dos itens existentes
+    updateItemsData() {
+        if (typeof products !== 'undefined' && Array.isArray(products)) {
+            this.items = this.items.map(item => {
+                const product = products.find(p => p.id == item.id);
+                if (product) {
+                    return {
+                        ...item,
+                        codBarras: product.codBarras || 'N/A',
+                        referencia: product.referencia || 'N/A',
+                        name: product.name || item.name,
+                        image: product.image || item.image
+                    };
+                }
+                return item;
+            });
+            this.saveToStorage();
+            this.updateCartDisplay();
+            console.log('🔄 Dados dos itens do carrinho atualizados');
+        }
     }
 
     // Adicionar item ao carrinho
@@ -52,7 +75,9 @@ class ShoppingCart {
                 name: product.name,
                 price: product.price,
                 image: product.image || '📦',
-                quantity: quantity
+                quantity: quantity,
+                codBarras: product.codBarras || 'N/A',
+                referencia: product.referencia || 'N/A'
             });
         }
 
@@ -99,6 +124,28 @@ class ShoppingCart {
         return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
     }
 
+    // Método para limpar carrinho e localStorage (para debug)
+    debugClearAll() {
+        this.items = [];
+        localStorage.removeItem('shoppingCart');
+        this.updateCartDisplay();
+        console.log('🗑️ Carrinho e localStorage limpos para debug');
+    }
+
+    // Método para verificar integridade dos dados
+    checkDataIntegrity() {
+        console.log('🔍 Verificando integridade dos dados do carrinho:');
+        this.items.forEach((item, index) => {
+            console.log(`Item ${index + 1}:`, {
+                id: item.id,
+                name: item.name,
+                codBarras: item.codBarras,
+                quantity: item.quantity,
+                hasCodeBarras: !!item.codBarras
+            });
+        });
+    }
+
     // Obter itens do carrinho (compatibilidade API)
     getItems() {
         return this.items;
@@ -117,14 +164,30 @@ class ShoppingCart {
     // Carregar do localStorage
     loadFromStorage() {
         const saved = localStorage.getItem('shoppingCart');
-        return saved ? JSON.parse(saved) : [];
+        const items = saved ? JSON.parse(saved) : [];
+        
+        // Migrar/atualizar itens existentes para incluir codBarras
+        return items.map(item => {
+            if (!item.codBarras) {
+                // Buscar produto original para obter código de barras
+                const product = typeof products !== 'undefined' && Array.isArray(products) 
+                    ? products.find(p => p.id == item.id) 
+                    : null;
+                
+                if (product) {
+                    item.codBarras = product.codBarras || 'N/A';
+                    item.referencia = product.referencia || 'N/A';
+                }
+            }
+            return item;
+        });
     }
 
     // Atualizar display do carrinho
     updateCartDisplay() {
         this.updateCartCount();
         this.updateCartItems();
-        this.updateCartTotal();
+        // Total removido - carrinho é para orçamento
     }
 
     // Atualizar contador do carrinho
@@ -152,10 +215,12 @@ class ShoppingCart {
 
         cartItems.innerHTML = this.items.map(item => `
             <div class="cart-item">
-                <div class="cart-item-image">${item.image}</div>
+                <div class="cart-item-image">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjRjhGOUZBIi8+CjxjaXJjbGUgY3g9IjMwIiBjeT0iMzAiIHI9IjEyIiBmaWxsPSIjRDJENkRDIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNjUlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOCIgZmlsbD0iIzk5QTNBRiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SU1HPC90ZXh0Pgo8L3N2Zz4=';">
+                </div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-price">${formatPrice(item.price)}</div>
+                    <div class="cart-item-ref">Cód: ${item.codBarras || 'N/A'}</div>
                     <div class="quantity-controls">
                         <button class="quantity-btn" onclick="cart.updateQuantity(${item.id}, ${item.quantity - 1})">
                             <i class="fas fa-minus"></i>
@@ -241,6 +306,7 @@ class ShoppingCart {
             document.body.style.overflow = 'auto';
         } else {
             // Abrir carrinho
+            this.checkDataIntegrity(); // Verificar dados antes de mostrar
             this.updateCartDisplay(); // Atualizar dados antes de mostrar
             cartModal.classList.add('active');
             overlay.style.display = 'block';

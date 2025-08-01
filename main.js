@@ -480,48 +480,28 @@ function processCheckoutWithCustomerData(customerData) {
     }
     
     try {
-        // Criar mensagem simples e direta
-        let message = `NOVO PEDIDO - ${STORE_CONFIG.storeName}\n\n`;
+        // Criar mensagem seguindo exatamente o modelo fornecido
+        let message = `NOVO ORCAMENTO DADOS DO CLIENTE: CNPJ: ${customerData.cnpj || 'Não informado'} Empresa: ${customerData.razaoSocial || 'Não informado'} Responsavel: ${customerData.nomeResponsavel || 'Não informado'} Email: ${customerData.email || 'Não informado'} Telefone: ${customerData.telefone || 'Não informado'}`;
         
-        // Dados do cliente
-        message += `DADOS DO CLIENTE:\n`;
-        message += `CNPJ: ${customerData.cnpj || 'Não informado'}\n`;
-        message += `Empresa: ${customerData.razaoSocial || 'Não informado'}\n`;
-        message += `Responsavel: ${customerData.nomeResponsavel || 'Não informado'}\n`;
-        message += `Email: ${customerData.email || 'Não informado'}\n`;
-        message += `Telefone: ${customerData.telefone || 'Não informado'}\n\n`;
-        
-        // Itens do pedido
-        message += `PRODUTOS:\n`;
-        let total = 0;
-        
-        items.forEach((item, index) => {
-            const price = Number(item.price) || 0;
-            const quantity = Number(item.quantity) || 1;
-            const itemTotal = price * quantity;
-            total += itemTotal;
-            
-            message += `${index + 1}. ${item.name || 'Produto sem nome'}\n`;
-            message += `Quantidade: ${quantity}\n`;
-            
-            if (price > 0) {
-                message += `Valor unitario: R$ ${price.toFixed(2).replace('.', ',')}\n`;
-                message += `Subtotal: R$ ${itemTotal.toFixed(2).replace('.', ',')}\n`;
-            } else {
-                message += `Valor: Consultar\n`;
-            }
-            message += `\n`;
-        });
-        
-        // Total
-        if (total > 0) {
-            message += `TOTAL GERAL: R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
-        } else {
-            message += `TOTAL GERAL: A consultar\n\n`;
+        if (customerData.nomeVendedor && customerData.nomeVendedor.trim()) {
+            message += ` Vendedor: ${customerData.nomeVendedor}`;
         }
         
-        message += `Gostaria de finalizar este pedido!\n`;
-        message += `Obrigado pela atencao!`;
+        message += ` PRODUTOS:`;
+        
+        // Adicionar apenas os primeiros 3 produtos para não ficar muito longo
+        const maxItems = Math.min(items.length, 3);
+        for (let i = 0; i < maxItems; i++) {
+            const item = items[i];
+            const quantity = Number(item.quantity) || 1;
+            message += ` ${i + 1}. ${item.name} Codigo: ${item.codBarras || 'N/A'} Quantidade: ${quantity} Valor: Consultar`;
+        }
+        
+        if (items.length > 3) {
+            message += ` +${items.length - 3} outros produtos`;
+        }
+        
+        message += ` Gostaria de consultar este Orcamento!`;
         
         console.log('� Mensagem gerada:', message);
         console.log('📏 Tamanho da mensagem:', message.length, 'caracteres');
@@ -622,7 +602,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 razaoSocial: formData.get('razaoSocial'),
                 nomeResponsavel: formData.get('nomeResponsavel'),
                 email: formData.get('email'),
-                telefone: formData.get('telefone')
+                telefone: formData.get('telefone'),
+                nomeVendedor: formData.get('nomeVendedor')
             };
             
             console.log('📋 Dados coletados do formulário:', customerData);

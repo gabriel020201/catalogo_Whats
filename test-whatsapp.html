@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste WhatsApp</title>
+</head>
+<body>
+    <h1>Teste de Mensagem WhatsApp</h1>
+    <button onclick="testarWhatsApp()">Testar WhatsApp</button>
+    
+    <script>
+        function testarWhatsApp() {
+            const numero = '556630245409';
+            const mensagem = `NOVO ORCAMENTO DADOS DO CLIENTE: CNPJ: 31.751.652/0001-91 Empresa: MARLUCY PEREIRA DA SILVA Responsavel: Teste Teste Email: heliton@vitaletelecom.com.br Telefone: (66) 9627-4859 PRODUTOS: 1. KIT DE REPAROS PARA PNEU DE BICICLETA C/ 8 PEÇAS SQ Código: 7899441505099 Quantidade: 1 Valor: Consultar 2. LUZ DE LED PARA BICICLETA/BIKE Código: 7893344556677 Quantidade: 1 Gostaria de consultar este Orçamento!`;
+            
+            console.log('📱 Número:', numero);
+            console.log('📝 Mensagem original:', mensagem);
+            
+            const mensagemCodificada = encodeURIComponent(mensagem);
+            console.log('🔗 Mensagem codificada:', mensagemCodificada);
+            
+            const url = `https://wa.me/${numero}?text=${mensagemCodificada}`;
+            console.log('🌐 URL completa:', url);
+            console.log('📏 Tamanho da URL:', url.length);
+            
+            // Abrir WhatsApp
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
