@@ -69,7 +69,7 @@ function loadProducts(category = 'all') {
     // Gerar HTML dos produtos
     const productsHTML = filteredProducts.map(product => {
         const productName = String(product.name || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-        const productReferencia = String(product.referencia || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+        const productCodBarras = String(product.codBarras || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCategory = String(product.category || 'outros');
         const productPrice = Number(product.price) || 0;
         const productId = Number(product.id) || 0;
@@ -88,7 +88,7 @@ function loadProducts(category = 'all') {
                 <div class="product-info">
                     <div class="product-category">${categoryName}</div>
                     <h3 class="product-name">${productName}</h3>
-                    <p class="product-description">Ref: ${productReferencia}</p>
+                    <p class="product-description">Cód: ${productCodBarras}</p>
                     <div class="product-price">${formattedPrice}</div>
                     <button class="add-to-cart-btn" onclick="addProductToCart(${productId})">
                         <i class="fas fa-cart-plus"></i>
@@ -161,22 +161,46 @@ function searchProducts() {
         const name = String(product.name || '').toLowerCase();
         const description = String(product.description || '').toLowerCase();
         const category = String(product.category || '').toLowerCase();
+        const codBarras = String(product.codBarras || '').toLowerCase();
+        const referencia = String(product.referencia || '').toLowerCase();
         
         return name.includes(searchTerm) || 
                description.includes(searchTerm) || 
-               category.includes(searchTerm);
+               category.includes(searchTerm) ||
+               codBarras.includes(searchTerm) ||
+               referencia.includes(searchTerm);
     });
     
-    console.log(`📦 ${filteredProducts.length} produtos encontrados na busca`);
+    // Detectar tipo de busca para feedback ao usuário
+    let searchType = '';
+    if (filteredProducts.length > 0) {
+        const firstMatch = filteredProducts[0];
+        const codBarras = String(firstMatch.codBarras || '').toLowerCase();
+        const referencia = String(firstMatch.referencia || '').toLowerCase();
+        
+        if (codBarras.includes(searchTerm)) {
+            searchType = ' (busca por código de barras)';
+        } else if (referencia.includes(searchTerm)) {
+            searchType = ' (busca por referência)';
+        }
+    }
+    
+    console.log(`📦 ${filteredProducts.length} produtos encontrados na busca${searchType}`);
     
     const productsGrid = document.getElementById('productsGrid');
     if (!productsGrid) return;
+    
+    // Mostrar contador de resultados
+    updateResultsCounter(filteredProducts.length, searchTerm, searchType);
     
     if (filteredProducts.length === 0) {
         productsGrid.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;">
                 <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block; color: #ddd;"></i>
                 Nenhum produto encontrado para "${searchTerm}"
+                <br><small style="color: #999; margin-top: 10px; display: block;">
+                    Tente buscar por nome, código de barras, referência ou categoria
+                </small>
             </div>
         `;
         return;
@@ -185,7 +209,7 @@ function searchProducts() {
     // Usar a mesma lógica de renderização
     const productsHTML = filteredProducts.map(product => {
         const productName = String(product.name || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-        const productReferencia = String(product.referencia || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+        const productCodBarras = String(product.codBarras || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCategory = String(product.category || 'outros');
         const productPrice = Number(product.price) || 0;
         const productId = Number(product.id) || 0;
@@ -199,7 +223,7 @@ function searchProducts() {
                 <div class="product-info">
                     <div class="product-category">${getCategoryDisplayName(productCategory)}</div>
                     <h3 class="product-name">${productName}</h3>
-                    <p class="product-description">Ref: ${productReferencia}</p>
+                    <p class="product-description">Cód: ${productCodBarras}</p>
                     <div class="product-price">${formatProductPrice(productPrice)}</div>
                     <button class="add-to-cart-btn" onclick="addProductToCart(${productId})">
                         <i class="fas fa-cart-plus"></i>
@@ -214,12 +238,39 @@ function searchProducts() {
     animateProductCards();
 }
 
+// Atualizar contador de resultados
+function updateResultsCounter(count, searchTerm, searchType = '') {
+    const resultsCounter = document.getElementById('resultsCounter');
+    const resultsText = document.getElementById('resultsText');
+    
+    if (!resultsCounter || !resultsText) return;
+    
+    if (count > 0 && searchTerm) {
+        let message = `${count} produto${count !== 1 ? 's' : ''} encontrado${count !== 1 ? 's' : ''} para "${searchTerm}"`;
+        
+        if (searchType) {
+            message += ` ${searchType}`;
+        }
+        
+        resultsText.textContent = message;
+        resultsCounter.style.display = 'flex';
+    } else {
+        resultsCounter.style.display = 'none';
+    }
+}
+
 // Limpar busca
 function clearSearch() {
     const searchInput = document.getElementById('searchInput');
+    const resultsCounter = document.getElementById('resultsCounter');
+    
     if (searchInput) {
         searchInput.value = '';
         loadProducts(window.currentCategory || 'all');
+    }
+    
+    if (resultsCounter) {
+        resultsCounter.style.display = 'none';
     }
 }
 

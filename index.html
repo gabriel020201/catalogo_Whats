@@ -12,7 +12,7 @@
         <nav class="navbar">
             <div class="nav-container">
                 <h1 class="logo">
-                    <img src="imagens_produtos/logo fundo invisivel.png" alt="Logo">
+                    <img src="imagens_produtos/LOGO/logo fundo invisivel.png" alt="Logo">
                    
                 </h1>
                 <div class="nav-menu">
@@ -49,7 +49,7 @@
                         <input 
                             type="text" 
                             id="searchInput" 
-                            placeholder="Buscar produtos..." 
+                            placeholder="Buscar por nome, código de barras ou categoria..." 
                             onkeyup="searchProducts()"
                         >
                         <button class="clear-search" onclick="clearSearch()" style="display: none;">
@@ -64,34 +64,57 @@
                         <i class="fas fa-th-large"></i>
                         Todos os Produtos
                     </button>
+                    <button class="filter-btn" onclick="filterProducts('acessorios_bike')">
+                        <i class="fas fa-bicycle"></i>
+                        Acessórios P/ Bike
+                    </button>
+                    <button class="filter-btn" onclick="filterProducts('acessorios_tv')">
+                        <i class="fas fa-tv"></i>
+                        Acessórios P/ TV's
+                    </button>
+                    <button class="filter-btn" onclick="filterProducts('adaptadores_eletricos')">
+                        <i class="fas fa-plug"></i>
+                        Adaptadores Elétricos
+                    </button>
                     <button class="filter-btn" onclick="filterProducts('ferramentas')">
                         <i class="fas fa-tools"></i>
                         Ferramentas
                     </button>
-                    <button class="filter-btn" onclick="filterProducts('eletronicos')">
-                        <i class="fas fa-tv"></i>
-                        Eletrônicos
+                    <button class="filter-btn" onclick="filterProducts('brinquedos')">
+                        <i class="fas fa-gamepad"></i>
+                        Brinquedos
+                    </button>
+                    <button class="filter-btn" onclick="filterProducts('higiene_pessoal')">
+                        <i class="fas fa-pump-soap"></i>
+                        Higiene Pessoal
+                    </button>
+                    <button class="filter-btn" onclick="filterProducts('papelaria')">
+                        <i class="fas fa-pen"></i>
+                        Papelaria
+                    </button>
+                    <button class="filter-btn" onclick="filterProducts('pilhas_baterias')">
+                        <i class="fas fa-battery-half"></i>
+                        Pilhas & Baterias
+                    </button>
+                    <button class="filter-btn" onclick="filterProducts('utilidades')">
+                        <i class="fas fa-home"></i>
+                        Utilidades
                     </button>
                     <button class="filter-btn" onclick="filterProducts('automotivo')">
                         <i class="fas fa-car"></i>
                         Automotivo
-                    </button>
-                    <button class="filter-btn" onclick="filterProducts('outros')">
-                        <i class="fas fa-boxes"></i>
-                        Outros
-                    </button>
-                    <button class="filter-btn" onclick="filterProducts('acessorios_bike')">
-                        <i class="fas fa-bicycle"></i>
-                        Bike & Acessórios
                     </button>
                     <button class="filter-btn" onclick="filterProducts('cozinha')">
                         <i class="fas fa-utensils"></i>
                         Cozinha
                     </button>
-
-                    <button class="filter-btn" onclick="filterProducts('automotivo')">
-                        <i class="fas fa-car"></i>
-                        Automotivo
+                    <button class="filter-btn" onclick="filterProducts('eletronicos')">
+                        <i class="fas fa-microchip"></i>
+                        Eletrônicos
+                    </button>
+                    <button class="filter-btn" onclick="filterProducts('outros')">
+                        <i class="fas fa-boxes"></i>
+                        Outros
                     </button>
                 </div>
 
@@ -335,39 +358,7 @@
     <script src="main.js"></script>
     
     <!-- Script de teste para WhatsApp -->
-    <script>
-        function testarWhatsAppDireto() {
-            const numero = '556630245409';
-            const mensagem = 'NOVO ORCAMENTO DADOS DO CLIENTE: CNPJ: 31.751.652/0001-91 Empresa: MARLUCY PEREIRA DA SILVA Responsavel: Teste Teste Email: heliton@vitaletelecom.com.br Telefone: (66) 9627-4859 PRODUTOS: 1. KIT DE REPAROS PARA PNEU DE BICICLETA C/ 8 PEÇAS SQ Código: 7899441505099 Quantidade: 1 Valor: Consultar Gostaria de consultar este Orçamento!';
-            
-            console.log('🧪 TESTE DIRETO:');
-            console.log('📱 Número:', numero);
-            console.log('📝 Mensagem:', mensagem);
-            
-            const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-            console.log('🌐 URL:', url);
-            console.log('📏 Tamanho:', url.length);
-            
-            window.open(url, '_blank');
-        }
-        
-        // Adicionar botão de teste temporário
-        setTimeout(() => {
-            const testBtn = document.createElement('button');
-            testBtn.textContent = '🧪 Teste WhatsApp';
-            testBtn.style.position = 'fixed';
-            testBtn.style.top = '10px';
-            testBtn.style.right = '10px';
-            testBtn.style.zIndex = '9999';
-            testBtn.style.padding = '10px';
-            testBtn.style.background = '#25D366';
-            testBtn.style.color = 'white';
-            testBtn.style.border = 'none';
-            testBtn.style.borderRadius = '5px';
-            testBtn.style.cursor = 'pointer';
-            testBtn.onclick = testarWhatsAppDireto;
-            document.body.appendChild(testBtn);
-        }, 1000);
-    </script>
+    
+    
 </body>
 </html>
