@@ -531,28 +531,39 @@ function processCheckoutWithCustomerData(customerData) {
     }
     
     try {
-        // Criar mensagem seguindo exatamente o modelo fornecido
-        let message = `NOVO ORCAMENTO DADOS DO CLIENTE: CNPJ: ${customerData.cnpj || 'Não informado'} Empresa: ${customerData.razaoSocial || 'Não informado'} Responsavel: ${customerData.nomeResponsavel || 'Não informado'} Email: ${customerData.email || 'Não informado'} Telefone: ${customerData.telefone || 'Não informado'}`;
+        // Criar mensagem com formatação melhorada
+        let message = `*NOVO ORÇAMENTO*
+
+*DADOS DO CLIENTE:*
+CNPJ: ${customerData.cnpj || 'Não informado'}
+Empresa: ${customerData.razaoSocial || 'Não informado'}
+Responsável: ${customerData.nomeResponsavel || 'Não informado'}
+Email: ${customerData.email || 'Não informado'}
+Telefone: ${customerData.telefone || 'Não informado'}`;
         
         if (customerData.nomeVendedor && customerData.nomeVendedor.trim()) {
-            message += ` Vendedor: ${customerData.nomeVendedor}`;
+            message += `
+Vendedor: ${customerData.nomeVendedor}`;
         }
         
-        message += ` PRODUTOS:`;
+        message += `
+
+*PRODUTOS:*`;
         
-        // Adicionar apenas os primeiros 3 produtos para não ficar muito longo
-        const maxItems = Math.min(items.length, 3);
-        for (let i = 0; i < maxItems; i++) {
+        // Incluir TODOS os produtos sem limitação
+        for (let i = 0; i < items.length; i++) {
             const item = items[i];
             const quantity = Number(item.quantity) || 1;
-            message += ` ${i + 1}. ${item.name} Codigo: ${item.codBarras || 'N/A'} Quantidade: ${quantity} Valor: Consultar`;
+            message += `
+
+${i + 1}. ${item.name}
+Código: ${item.codBarras || 'N/A'}
+Quantidade: ${quantity}`;
         }
         
-        if (items.length > 3) {
-            message += ` +${items.length - 3} outros produtos`;
-        }
-        
-        message += ` Gostaria de consultar este Orcamento!`;
+        message += `
+
+Gostaria de consultar este orçamento!`;
         
         console.log('� Mensagem gerada:', message);
         console.log('📏 Tamanho da mensagem:', message.length, 'caracteres');
@@ -564,38 +575,9 @@ function processCheckoutWithCustomerData(customerData) {
         console.log('🔗 URL do WhatsApp:', whatsappURL);
         console.log('📏 Tamanho da URL:', whatsappURL.length, 'caracteres');
         
-        // Verificar tamanho da URL
-        if (whatsappURL.length > 2000) {
-            console.warn('⚠️ URL muito longa, criando versão resumida...');
-            
-            // Versão ultra resumida
-            const shortMessage = `PEDIDO - ${STORE_CONFIG.storeName}
-            
-CLIENTE: ${customerData.razaoSocial}
-CNPJ: ${customerData.cnpj}
-CONTATO: ${customerData.telefone}
-
-${items.length} produtos no carrinho.
-
-Gostaria de finalizar o pedido!
-Obrigado!`;
-            
-            const shortURL = `https://wa.me/${STORE_CONFIG.whatsappNumber}?text=${encodeURIComponent(shortMessage)}`;
-            
-            if (shortURL.length <= 2000) {
-                window.open(shortURL, '_blank');
-                console.log('✅ Usando versão resumida');
-            } else {
-                // Último recurso: abrir WhatsApp sem mensagem
-                window.open(`https://wa.me/${STORE_CONFIG.whatsappNumber}`, '_blank');
-                console.log('⚠️ Abrindo WhatsApp sem mensagem pré-definida');
-                showNotification('⚠️ WhatsApp aberto. Cole a mensagem manualmente.', 'warning');
-            }
-        } else {
-            // URL normal, abrir
-            window.open(whatsappURL, '_blank');
-            console.log('✅ WhatsApp aberto com mensagem completa');
-        }
+        // Sempre abrir com todos os produtos - sem limitações
+        window.open(whatsappURL, '_blank');
+        console.log('✅ WhatsApp aberto com TODOS os produtos do pedido');
         
         // Fechar modal
         closeCustomerModal();
