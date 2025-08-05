@@ -297,11 +297,15 @@ function addProductToCart(productId) {
 // Funções auxiliares
 function getCategoryDisplayName(category) {
     const categoryNames = {
-        'acessorios_bike': 'Acessórios Bike',
-        'automotivo': 'Automotivo',
-        'cozinha': 'Cozinha',
-        'eletronicos': 'Eletrônicos',
+        'acessorios_bike': 'Acessórios P/ Bike',
+        'acessorios_tv': 'Acessórios P/ TV\'s',
+        'adaptadores_eletricos': 'Adaptadores Elétricos',
         'ferramentas': 'Ferramentas',
+        'brinquedos': 'Brinquedos',
+        'higiene_pessoal': 'Higiene Pessoal',
+        'papelaria': 'Papelaria',
+        'pilhas_baterias': 'Pilhas & Baterias',
+        'utilidades': 'Utilidades',
         'outros': 'Outros'
     };
     return categoryNames[category] || category;
