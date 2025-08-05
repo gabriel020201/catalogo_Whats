@@ -70,6 +70,7 @@ function loadProducts(category = 'all') {
     const productsHTML = filteredProducts.map(product => {
         const productName = String(product.name || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCodBarras = String(product.codBarras || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+        const productNcm = String(product.ncm || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCategory = String(product.category || 'outros');
         const productPrice = Number(product.price) || 0;
         const productId = Number(product.id) || 0;
@@ -89,6 +90,7 @@ function loadProducts(category = 'all') {
                     <div class="product-category">${categoryName}</div>
                     <h3 class="product-name">${productName}</h3>
                     <p class="product-description">Cód: ${productCodBarras}</p>
+                    ${productNcm ? `<p class="product-ncm">NCM: ${productNcm}</p>` : ''}
                     <div class="product-price">${formattedPrice}</div>
                     <button class="add-to-cart-btn" onclick="addProductToCart(${productId})">
                         <i class="fas fa-cart-plus"></i>
@@ -163,12 +165,14 @@ function searchProducts() {
         const category = String(product.category || '').toLowerCase();
         const codBarras = String(product.codBarras || '').toLowerCase();
         const referencia = String(product.referencia || '').toLowerCase();
+        const ncm = String(product.ncm || '').toLowerCase();
         
         return name.includes(searchTerm) || 
                description.includes(searchTerm) || 
                category.includes(searchTerm) ||
                codBarras.includes(searchTerm) ||
-               referencia.includes(searchTerm);
+               referencia.includes(searchTerm) ||
+               ncm.includes(searchTerm);
     });
     
     // Detectar tipo de busca para feedback ao usuário
@@ -177,11 +181,14 @@ function searchProducts() {
         const firstMatch = filteredProducts[0];
         const codBarras = String(firstMatch.codBarras || '').toLowerCase();
         const referencia = String(firstMatch.referencia || '').toLowerCase();
+        const ncm = String(firstMatch.ncm || '').toLowerCase();
         
         if (codBarras.includes(searchTerm)) {
             searchType = ' (busca por código de barras)';
         } else if (referencia.includes(searchTerm)) {
             searchType = ' (busca por referência)';
+        } else if (ncm.includes(searchTerm)) {
+            searchType = ' (busca por NCM)';
         }
     }
     
@@ -199,7 +206,7 @@ function searchProducts() {
                 <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block; color: #ddd;"></i>
                 Nenhum produto encontrado para "${searchTerm}"
                 <br><small style="color: #999; margin-top: 10px; display: block;">
-                    Tente buscar por nome, código de barras, referência ou categoria
+                    Tente buscar por nome, código de barras, referência, NCM ou categoria
                 </small>
             </div>
         `;
@@ -210,6 +217,7 @@ function searchProducts() {
     const productsHTML = filteredProducts.map(product => {
         const productName = String(product.name || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCodBarras = String(product.codBarras || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+        const productNcm = String(product.ncm || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         const productCategory = String(product.category || 'outros');
         const productPrice = Number(product.price) || 0;
         const productId = Number(product.id) || 0;
@@ -224,6 +232,7 @@ function searchProducts() {
                     <div class="product-category">${getCategoryDisplayName(productCategory)}</div>
                     <h3 class="product-name">${productName}</h3>
                     <p class="product-description">Cód: ${productCodBarras}</p>
+                    ${productNcm ? `<p class="product-ncm">NCM: ${productNcm}</p>` : ''}
                     <div class="product-price">${formatProductPrice(productPrice)}</div>
                     <button class="add-to-cart-btn" onclick="addProductToCart(${productId})">
                         <i class="fas fa-cart-plus"></i>
