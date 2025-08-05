@@ -414,16 +414,15 @@ body::-webkit-scrollbar {
 }
 
 .product-ncm {
-    color: #6b46c1;
-    font-size: 0.8rem;
-    margin-bottom: 15px;
+    color: #718096;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
     line-height: 1.4;
     font-weight: 500;
-    background: #f3f0ff;
-    padding: 5px 10px;
+    background: #f7f8fa;
+    padding: 6px 10px;
     border-radius: 6px;
-    border-left: 3px solid #6b46c1;
-    font-family: 'Courier New', monospace;
+    border-left: 3px solid #667eea;
 }
 
 .product-price {
